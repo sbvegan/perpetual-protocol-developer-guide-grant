@@ -17,11 +17,6 @@
   },
   "homepage": "https://github.com/sbvegan/perpetual-protocol-developer-guide-grant#readme",
   "dependencies": {
-    "@perp/curie-contract": "^1.0.13",
-    "dotenv": "^14.2.0"
-  },
-  "devDependencies": {
-    "ethers": "^5.5.3",
-    "hardhat": "^2.8.3"
+    "@perp/curie-contract": "^1.0.13"
   }
 }

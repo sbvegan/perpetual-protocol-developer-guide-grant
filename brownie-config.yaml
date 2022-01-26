@@ -1,0 +1,9 @@
+dotenv: .env
+networks:
+  default: optimisim-mainnet-fork
+  optimisim-mainnet-fork:
+    alchemy: ${MAINNET_ALCHEMY}
+  mainnet:
+    alchemy: ${MAINNET_ALCHEMY}
+wallets:
+  from_key: ${PRIVATE_KEY}
