@@ -1,3 +1,9 @@
+dependencies:
+  - sbvegan/perpv2-curie-contracts@1.0.13-staging
+compiler:
+  solc:
+    remappings:
+      - '@sbvegan=sbvegan/perpv2-curie-contracts@1.0.13-staging'
 dotenv: .env
 networks:
   default: optimisim-mainnet-fork
