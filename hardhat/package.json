@@ -11,7 +11,9 @@
   "dependencies": {
     "@openzeppelin/contracts-upgradeable": "3.4.2",
     "@perp/curie-contract": "^1.0.14",
+    "@perp/perp-oracle-contract": "^0.2.2",
     "@uniswap/v3-core": "^1.0.1",
-    "@uniswap/v3-periphery": "^1.4.0"
+    "@uniswap/v3-periphery": "^1.4.0",
+    "dotenv": "^15.0.0"
   }
 }

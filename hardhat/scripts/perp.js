@@ -15,15 +15,30 @@ async function main() {
 
     console.log("getting the clearing house...")
     const clearingHouse = await hre.ethers.getContractAt("ClearingHouse", ADDRESSES.clearing_house)
-    console.log(clearingHouse)
-    // console.log("getting clearing house config...")
-    // const clearingHouseConfig = getClearingHouseConfig()
+    // console.log(clearingHouse)
 
-    // console.log("getting the exchange...")
-    // const exchange = getExchange()
+    console.log("getting clearing house config...")
+    const clearingHouseConfigAddress = clearingHouse.getClearingHouseConfig()
+    const clearingHouseConfig = await hre.ethers.getContractAt("ClearingHouseConfig", clearingHouseConfigAddress)
+    // console.log(clearingHouseConfig)
 
-    // console.log("getting vbtc mark twap...")
-    // const twapInterval = getTwapInterval(clearing_house_config)
+    console.log("getting the exchange...")
+    const exchangeAddress = clearingHouse.getExchange()
+    const exchange = await hre.ethers.getContractAt("Exchange", exchangeAddress)
+
+    console.log("getting twap interval...")
+    const twapInterval = await clearingHouseConfig.getTwapInterval()
+    console.log(twapInterval)
+
+    console.log("getting vbtc mark price...")
+    const vbtcMark = await exchange.getSqrtMarkTwapX96(ADDRESSES.vbtc, twapInterval)
+    console.log(vbtcMark)
+
+    console.log("getting btc index price...")
+    const vbtcBaseToken = await hre.ethers.getContractAt("BaseToken", ADDRESSES.vbtc)
+    // console.log(vbtcBaseToken)
+    const btcIndexPrice = await vbtcBaseToken.getIndexPrice(twapInterval)
+    console.log(btcIndexPrice)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
