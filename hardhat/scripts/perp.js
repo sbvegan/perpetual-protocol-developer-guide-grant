@@ -10,9 +10,6 @@ const ADDRESSES = {
 }
 
 async function main() {
-    const veth_address = ""
-    const vbtc_address = ""
-
     console.log("getting the clearing house...")
     const clearingHouse = await hre.ethers.getContractAt("ClearingHouse", ADDRESSES.clearing_house)
 
