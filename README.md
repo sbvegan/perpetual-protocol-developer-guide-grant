@@ -6,7 +6,7 @@
 
 Successfully programmatically pulled the mark price, index price, ~~and funding rate~~ from the mainnet contracts by Feb 4th.
 
-I have been able to successfully pull the mark and index price from PerpV2's smart contracts. However, in the protocol's current state, external accounts cannot read the funding rate of a contract. Developers can get the funding rate from [Perp's Subgraph](https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism?query=List%20FundingUpdateds).
+I have been able to successfully pull the mark and index price from PerpV2's smart contracts. However, in the protocol's current state, external accounts cannot read the funding rate of a contract traded on Perp. Developers can get the funding rate from [Perp's Subgraph](https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism?query=List%20FundingUpdateds).
 
 If you want to verify completeness:
 
