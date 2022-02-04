@@ -1,24 +1,19 @@
 {
-  "name": "perpetual-protocol-developer-guide-grant",
-  "version": "1.0.0",
-  "description": "Developer Guide",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "hardhat-project",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.4",
+    "@nomiclabs/hardhat-waffle": "^2.0.2",
+    "chai": "^4.3.6",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.4",
+    "hardhat": "^2.8.3"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sbvegan/perpetual-protocol-developer-guide-grant.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sbvegan/perpetual-protocol-developer-guide-grant/issues"
-  },
-  "homepage": "https://github.com/sbvegan/perpetual-protocol-developer-guide-grant#readme",
   "dependencies": {
-    "@perp/curie-contract": "^1.0.13",
+    "@openzeppelin/contracts-upgradeable": "3.4.2",
+    "@perp/curie-contract": "^1.0.14",
+    "@perp/perp-oracle-contract": "^0.2.2",
     "@uniswap/v3-core": "^1.0.1",
-    "@uniswap/v3-periphery": "^1.4.0"
+    "@uniswap/v3-periphery": "^1.4.0",
+    "dotenv": "^15.0.0"
   }
 }
