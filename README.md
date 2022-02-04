@@ -2,7 +2,7 @@
 
 ## Milestones:  
 
-### Milestone 1 - Completed (commit: )
+### Milestone 1 - Completed (commit: 2b8b539)
 
 Successfully programmatically pulled the mark price, index price, ~~and funding rate~~ from the mainnet contracts by Feb 4th.
 
