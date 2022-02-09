@@ -1,12 +1,8 @@
-# How to get mark and index prices from PerpV2
+# How to get mark and index prices from Perpetual Protocol V2
 
 The following guide will show you how to read the mark and index prices of the assets trading on the Perpetual Protocol.
 
 ## Environment
-- initialize
-- .env 
-- dependencies
-- hardhat 
 
 First up, let's setup our environment, so we have something reproducible. Create an empty directory, navigate inside, and create a npm project. 
 
@@ -28,7 +24,7 @@ Run hardhat
 npx hardhat
 ```
 
-You'll get the following output. Select `Create a basic sample project`
+You'll get the following output and select: `Create a basic sample project`
 
 ```
 888    888                      888 888               888
@@ -55,32 +51,61 @@ Select the default parameters by just hitting `enter`.
 Update your `package.json` by adding this entry and then run `npm i`
 ```
 "dependencies": {
-  "@openzeppelin/contracts-upgradeable": "3.4.2",
   "@perp/curie-contract": "^1.0.14",
   "@perp/perp-oracle-contract": "^0.2.2",
+  "@openzeppelin/contracts-upgradeable": "3.4.2",
   "@uniswap/v3-core": "^1.0.1",
   "@uniswap/v3-periphery": "^1.4.0",
   "dotenv": "^15.0.0"
 }
 ```
 
-TODO: explain dependencies
+- `@perp/curie-contract` contains the Perpetual Protocol V2 smart contracts.
+- `@perp/perp-oracle-contract` contains periphery smart contracts that the Perpetual Protocol depends on.
+- `@openzeppelin/contracts-upgradeable` are smart contracts that the Perpetual Protocol depends on.
+- `@uniswap/v3-core` are smart contracts that the Perpetual Protocol depends on and we'll use to format the prices.
+- `@uniswap/v3-periphery` are smart contracts that the Perpetual Protocol depends on.
+- `dotenv` loads environment variables to securely manage secrets.
 
-TODO: create `.env` file
+### Alchemy
+
+To interact with [Optimism](https://www.optimism.io/), you're going to need to have access to a node, and I've choosen [Alchemy](https://alchemy.com/?r=dbbb251e37e26674) to achieve this. *Note: that link to Alchemy is my personal referral link.* After signing up, you're going to navigate to your dashboard and click the button that says "+ CREATE APP".
+
+Go ahead and fill out the form that pops up:
+
+![create app form](img/alchemy-create-app.png)
+
+Next click on the application you just created and then click the "VIEW KEY" button, and copy the http url:
+
+![view key](img/alchemy-private-key.png)
+
+Next create an `.env` file with the following contents:
+
+```
+export ALCHEMY_OPTIMISM=https://opt-mainnet.g.alchemy.com/v2/<private-key>
+```
 
 TODO: update `hardhat.config.js` so it looks like this:
 
 ```
+require("dotenv").config()
+```
+
+```
 module.exports = {
-  solidity: "0.7.6",
+  solidity: {
+    compilers: [
+      { version: "0.7.6" },
+    ]
+  },
   networks: {
     hardhat: {
       forking: {
-        url: INSERT_ALCHEMY_OPTIMISM_URL
+        url: process.env.ALCHEMY_OPTIMISM
+      }
     }
   },
 };
-
 ```
 
 ## Smart Contract
