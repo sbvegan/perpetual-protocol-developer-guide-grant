@@ -85,11 +85,13 @@ Next create an `.env` file with the following contents:
 export ALCHEMY_OPTIMISM=https://opt-mainnet.g.alchemy.com/v2/<private-key>
 ```
 
-TODO: update `hardhat.config.js` so it looks like this:
+Next we'll update the `hardhat.config.js`. Add the following to the top of the file:
 
 ```
 require("dotenv").config()
 ```
+
+This will allow us to load the environment variables in our configuration. Now we'll modify our `module.exports` to look like this:
 
 ```
 module.exports = {
@@ -108,13 +110,15 @@ module.exports = {
 };
 ```
 
-## Smart Contract
+The configurations you just added tells hardhat to use solidity compiler version 0.7.6 and to use a fork of the Optimism mainnet. After all that setup we're finally ready to write some code.
+
+## Solidity
 
 TODO: delete default `Greeter.sol`
 
 TODO: walk through the smart contract code
 
-## Script
+## JavaScript
 
 TODO: walk through script
 
