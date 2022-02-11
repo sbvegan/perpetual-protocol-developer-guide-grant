@@ -9,7 +9,7 @@ import {Exchange} from "@perp/curie-contract/contracts/Exchange.sol";
 import {FixedPoint96} from "@uniswap/v3-core/contracts/libraries/FixedPoint96.sol";
 import {FullMath} from "@uniswap/v3-core/contracts/libraries/FullMath.sol";
 
-contract PerpSandbox {
+contract FetchPrice {
     ClearingHouse clearingHouse;
     ClearingHouseConfig clearingHouseConfig;
     Exchange exchange;
@@ -25,6 +25,22 @@ contract PerpSandbox {
 
     function getTwapInterval() public view returns (uint32) {
         return clearingHouseConfig.getTwapInterval();
+    }
+
+    function formatSqrtPriceX96ToPriceX96(uint160 sqrtPriceX96)
+        internal
+        pure
+        returns (uint256)
+    {
+        return FullMath.mulDiv(sqrtPriceX96, sqrtPriceX96, FixedPoint96.Q96);
+    }
+
+    function formatX96ToX10_18(uint256 valueX96)
+        internal
+        pure
+        returns (uint256)
+    {
+        return FullMath.mulDiv(valueX96, 1 ether, FixedPoint96.Q96);
     }
 
     function getMarkPrice(address _baseToken, uint32 _twapInterval)
@@ -48,21 +64,5 @@ contract PerpSandbox {
     {
         BaseToken baseToken = BaseToken(_baseToken);
         return baseToken.getIndexPrice(_twapInterval);
-    }
-
-    function formatSqrtPriceX96ToPriceX96(uint160 sqrtPriceX96)
-        internal
-        pure
-        returns (uint256)
-    {
-        return FullMath.mulDiv(sqrtPriceX96, sqrtPriceX96, FixedPoint96.Q96);
-    }
-
-    function formatX96ToX10_18(uint256 valueX96)
-        internal
-        pure
-        returns (uint256)
-    {
-        return FullMath.mulDiv(valueX96, 1 ether, FixedPoint96.Q96);
     }
 }

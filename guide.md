@@ -114,7 +114,109 @@ The configurations you just added tells hardhat to use solidity compiler version
 
 ## Solidity
 
-TODO: delete default `Greeter.sol`
+Go ahead and delete `contracts/Greeter.sol` and create a new file named `contracts/FetchPrice.sol`.
+
+First define add the license identifier and the solidity version to the top of the file:
+
+```
+// SPDX-License-Identifier: GPL-2.0-or-later
+pragma solidity 0.7.6;
+```
+
+Next let's import the Perp and Uniswap contracts that we're going to use:
+
+```
+import {BaseToken} from "@perp/curie-contract/contracts/BaseToken.sol";
+import {ClearingHouse} from "@perp/curie-contract/contracts/ClearingHouse.sol";
+import {ClearingHouseConfig} from "@perp/curie-contract/contracts/ClearingHouseConfig.sol";
+import {Exchange} from "@perp/curie-contract/contracts/Exchange.sol";
+import {FixedPoint96} from "@uniswap/v3-core/contracts/libraries/FixedPoint96.sol";
+import {FullMath} from "@uniswap/v3-core/contracts/libraries/FullMath.sol";
+```
+
+Now let's define our contract:
+
+```
+contract FetchPrice {
+
+}
+```
+
+And now we can start filling out the contents of the contract. Now lets create a few state variables. These will be references to Perp contracts found on-chain:
+
+```
+ClearingHouse clearingHouse;
+ClearingHouseConfig clearingHouseConfig;
+Exchange exchange;
+```
+
+The following function will take the Clearing House address and it will initialize all the state variables. The Perp Clearing House stores the addresses of the Clearing House Config and Exchange:
+
+```
+function initialize(address _clearingHouseAddress) public {
+    clearingHouse = ClearingHouse(_clearingHouseAddress);
+    address clearingHouseConfigAddress = clearingHouse
+        .getClearingHouseConfig();
+    clearingHouseConfig = ClearingHouseConfig(clearingHouseConfigAddress);
+    address exchangeAddress = clearingHouse.getExchange();
+    exchange = Exchange(exchangeAddress);
+}
+```
+
+Now we'll add a function that will read the Clearing House Config and grab the TWAP interval. This is necessary input parameter to get the mark and index price:
+
+```
+function getTwapInterval() public view returns (uint32) {
+    return clearingHouseConfig.getTwapInterval();
+}
+```
+
+Next we're going to add a couple helper functions. These will help format the mark price so something human readable:
+
+```
+function formatSqrtPriceX96ToPriceX96(uint160 sqrtPriceX96)
+    internal
+    pure
+    returns (uint256)
+{
+    return FullMath.mulDiv(sqrtPriceX96, sqrtPriceX96, FixedPoint96.Q96);
+}
+
+function formatX96ToX10_18(uint256 valueX96)
+    internal
+    pure
+    returns (uint256)
+{
+    return FullMath.mulDiv(valueX96, 1 ether, FixedPoint96.Q96);
+}
+```
+
+Finally we'll add the final functions that will read the mark and index price from the Perp contracts:
+
+```
+function getMarkPrice(address _baseToken, uint32 _twapInterval)
+    public
+    view
+    returns (uint256)
+{
+    uint160 sqrtMarkX96 = exchange.getSqrtMarkTwapX96(
+        _baseToken,
+        _twapInterval
+    );
+    uint256 markPriceX96 = formatSqrtPriceX96ToPriceX96(sqrtMarkX96);
+    uint256 markPrice = formatX96ToX10_18(markPriceX96);
+    return markPrice;
+}
+
+function getIndexPrice(address _baseToken, uint32 _twapInterval)
+    public
+    view
+    returns (uint256)
+{
+    BaseToken baseToken = BaseToken(_baseToken);
+    return baseToken.getIndexPrice(_twapInterval);
+}
+```
 
 TODO: walk through the smart contract code
 
