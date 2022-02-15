@@ -218,16 +218,111 @@ function getIndexPrice(address _baseToken, uint32 _twapInterval)
 }
 ```
 
-TODO: walk through the smart contract code
-
 ## JavaScript
 
-TODO: walk through script
+Now lets write the script that will deploy our contract on a forked network and call the functions that will read the data stored in the Perpetual Protocol's smart contracts. First up, delete the `scripts/sample-script.js` and create a new file named `scripts/fetchPrice.js`. In this new file we need to import a dependency from hardhat and some relevant on-chain address, so go ahead and add the following:
 
-TODO: run script
+```
+const hre = require("hardhat");
 
-TODO: go over expected output
+const ADDRESSES = {
+    clearing_house: "0x82ac2CE43e33683c58BE4cDc40975E73aA50f459",
+    veth: "0x8c835dfaa34e2ae61775e80ee29e2c724c6ae2bb",
+    vbtc: "0x86f1e0420c26a858fc203a3645dd1a36868f18e5"
+}
+```
+
+Now let's add a `main` function:
+```
+async function main() {
+
+}
+```
+
+Next up let's fill the `main` function. First we'll need to deploy the contract:
+
+```
+console.log("Deploying FetchPrice...")
+const FetchPrice = await hre.ethers.getContractFactory("FetchPrice");
+const fetchPrice = await FetchPrice.deploy();
+await fetchPrice.deployed();
+console.log("FetchPrice deployed to: ", fetchPrice.address);
+```
+
+The smart contract needs to be initialized so it knows where to read the relvant data add the following to do this:
+
+```
+console.log("Initializing FetchPrice...")
+await fetchPrice.initialize(ADDRESSES.clearing_house)
+```
+
+Now we need to get the `TWAP interval` because that is an input parameter when retrieving the mark and index price. Add the following to the `main` function:
+
+```
+console.log("Getting TWAP interval...")
+const twapInterval = await fetchPrice.getTwapInterval()
+console.log(twapInterval)
+```
+
+Now all that remains for the `main` function is to read the mark and index price. Adding the following will do that:
+
+```
+console.log("Getting vbtc mark price...")
+const vbtcMark = await fetchPrice.getMarkPrice(ADDRESSES.vbtc, twapInterval)
+console.log(vbtcMark / 10 ** 18)
+
+console.log("Getting btc index price...")
+const btcIndex = await fetchPrice.getIndexPrice(ADDRESSES.vbtc, twapInterval)
+console.log(btcIndex / 10 ** 18)
+
+console.log("Getting veth mark price...")
+const vethMark = await fetchPrice.getMarkPrice(ADDRESSES.veth, twapInterval)
+console.log(vethMark / 10 ** 18)
+
+console.log("Getting eth index price...")
+const ethIndex = await fetchPrice.getIndexPrice(ADDRESSES.veth, twapInterval)
+console.log(ethIndex / 10 ** 18)
+```
+
+You may notice that I am dividing the output by 10^18 and thats because the smart contract is returning the values with the `wei` to `ether` conversion. (`1 ether` is `10^18 wei`). 
+
+Lastly, we need to call the main function, so add this at the bottom of the file to do that: 
+
+```
+main()
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });
+```
+
+### Expected Output
+
+If all has gone well, we can run the script with `hardhat` with the following command:
+
+```
+npx hardhat run scripts/fetchPrice.js
+```
+
+and you should get something similar to the following output:
+
+```
+Deploying FetchPrice...
+FetchPrice deployed to:  0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
+Initializing FetchPrice...
+Getting TWAP interval...
+900
+Getting vbtc mark price...
+42717.62555622542
+Getting btc index price...
+42677.27626666
+Getting veth mark price...
+2939.2235053411996
+Getting eth index price...
+2937.5449666600002
+```
 
 ## Conclusion
 
-TODO: include full code repo
+[This](https://github.com/sbvegan/perpetual-protocol-developer-guide-grant) is a link to the full code repository and [this]() is a link to a YouTube video tutorial. I had a lot of fun diving into learning more about the Perpetual Protocol and I plan to continue on learning and contributing. A lot of what I did was reading their smart contracts and tracing their code backwards to find what I needed.
