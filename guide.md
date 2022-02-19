@@ -459,4 +459,4 @@ Getting eth index price...
 
 ## Conclusion
 
-[This](https://github.com/sbvegan/perpetual-protocol-developer-guide-grant) is a link to the full code repository. I had a lot of fun learning about the Perpetual Protocol and I plan to continue on learning and contributing. 
+[This](https://github.com/sbvegan/perpetual-protocol-developer-guide-grant) is a link to the full code repository. I had a lot of fun learning about the Perpetual Protocol and I plan to continue on learning and contributing. Please feel free to reach out with questions or if you'd like me to put together any specific content.
